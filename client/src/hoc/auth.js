@@ -6,10 +6,11 @@ export default function (ComposedClass, reload, adminRoute = null) {
 	function AuthenticationCheck(props) {
 		let user = useSelector((state) => state.user);
 		const dispatch = useDispatch();
-
+		console.log(reload);
 		useEffect(() => {
 			dispatch(auth()).then(async (response) => {
 				if (await !response.payload.isAuth) {
+					console.log('auth duoi: ', reload);
 					if (reload) {
 						props.history.push('/login');
 					}

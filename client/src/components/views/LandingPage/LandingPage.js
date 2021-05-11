@@ -82,7 +82,7 @@ function LandingPage() {
 	};
 
 	const onLoadMore = () => {
-		setVisible(visible + 1);
+		setVisible(visible + 4);
 	};
 
 	const renderCards = SearchTerms.slice(0, visible).map((products, index) => {

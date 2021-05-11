@@ -5,7 +5,8 @@ import Axios from 'axios';
 const { Title } = Typography;
 const { TextArea } = Input;
 
-function UploadVoucherPage() {
+function UploadVoucherPage(props) {
+	const shopId = props.url.id;
 	const [tittle, setTittle] = useState('');
 	const [description, setDescription] = useState('');
 	const [price, setPrice] = useState(0);
@@ -43,8 +44,9 @@ function UploadVoucherPage() {
 			price: price,
 			image: Images,
 			category: category,
+			shopId: shopId,
 		};
-
+		console.log(voucher);
 		Axios.post('/api/product/uploadVoucher', voucher).then((res) => {
 			if (res.data.success) {
 				alert('Upload successfully');
@@ -55,7 +57,7 @@ function UploadVoucherPage() {
 	};
 
 	return (
-		<div style={{ maxWidth: '700px', margin: '2rem auto' }}>
+		<div style={{ maxWidth: '700px', margin: '2rem auto' }} className='wow fadeInUp'>
 			<div style={{ textAlign: 'center', marginBottom: '2rem' }}>
 				<Title level={2}>Upload Voucher</Title>
 			</div>

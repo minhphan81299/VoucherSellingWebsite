@@ -38,6 +38,9 @@ const productSchema = mongoose.Schema(
 		category: {
 			type: String,
 		},
+		shopId: {
+			type: String,
+		},
 	},
 	{ timestamps: true }
 );

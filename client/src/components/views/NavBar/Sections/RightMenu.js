@@ -10,9 +10,15 @@ import { useSelector } from 'react-redux';
 function RightMenu(props) {
 	const user = useSelector((state) => state.user);
 	const [quantity, setQuantity] = useState(0);
+	const [userId, setUserId] = useState();
 
 	useEffect(() => {
 		setQuantity(user.Carts.length);
+		if (user) {
+			const userId = user.userData?._id;
+
+			setUserId(userId);
+		}
 	}, [user]);
 	const logoutHandler = () => {
 		axios.get(`${USER_SERVER}/logout`).then((response) => {
@@ -46,7 +52,7 @@ function RightMenu(props) {
 					</Link>
 				</Menu.Item>
 				<Menu.Item key='app'>
-					<Link to='/voucher/upload'>Upload</Link>
+					<Link to={'/myshop/' + userId}>My Shop</Link>
 				</Menu.Item>
 				<Menu.Item key='logout'>
 					<a onClick={logoutHandler}>Logout</a>

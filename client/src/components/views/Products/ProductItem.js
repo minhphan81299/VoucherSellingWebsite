@@ -3,7 +3,6 @@ import { MDBBtn } from 'mdbreact';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../../../_actions/user_actions';
-import { set } from 'mongoose';
 import { Link } from 'react-router-dom';
 
 function ProductItem({ match }) {
@@ -11,14 +10,17 @@ function ProductItem({ match }) {
 	const [quantity, setQuantity] = useState(0);
 	const [price, setPrice] = useState();
 	const [realPrice, setRealPrice] = useState();
+	const products = useSelector((state) => state.user.Carts);
+
 	const dispatch = useDispatch();
 
 	useEffect(() => {
 		const getResult = async () => {
 			const result = await axios.post(`/api/product/${match.params.id}`);
 			console.log(result.data.product[0]);
-			const { description, price, category } = result.data.product[0];
-			setProductItem({ description, price, category });
+			const { description, price, category, _id } = result.data.product[0];
+
+			setProductItem({ description, price, category, _id });
 			setPrice(price);
 			setRealPrice(price);
 		};

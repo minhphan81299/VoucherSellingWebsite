@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Product } = require('../models/Product');
+const { Selling } = require('../models/Selling');
 const multer = require('multer');
 
 const { auth } = require('../middleware/auth');
@@ -46,6 +47,15 @@ router.post('/uploadVoucher', auth, (req, res) => {
 	});
 });
 
+router.post('/selling', auth, (req, res) => {
+	const selling = new Selling(req.body);
+	console.log(req.body);
+	selling.save((err) => {
+		if (err) return res.status(400).json({ success: false, err });
+		return res.status(200).json({ success: true });
+	});
+});
+router.post('/selling/:id', auth, (req, res) => {});
 router.post('/getVoucher', (req, res) => {
 	let term = req.body.searchTerm;
 	let category = req.body.filters?.Category;
@@ -77,6 +87,16 @@ router.post('/:id', (req, res) => {
 	Product.find({ _id }).exec((err, product) => {
 		if (err) return res.status(400).json({ success: false });
 		res.status(200).json({ success: true, product });
+	});
+});
+
+router.post('/getVoucherShopId/:id', (req, res) => {
+	const _id = req.params.id;
+	console.log(req.params.id);
+	Product.find({ _id }).exec((err, product) => {
+		if (err) return res.status(400).json({ success: false });
+		console.log(product);
+		res.status(200).json({ success: true, shopId: product.shopId });
 	});
 });
 

@@ -1,24 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import CodeVoucher from './CodeVoucher';
+import axios from 'axios';
 
-function CheckOut() {
+function CheckOut(props) {
 	const products = useSelector((state) => state.user.Carts);
+	const userId = useSelector((state) => state.user?.userData?._id);
 	const [quantity, setQuantity] = useState(products?.length);
-
+	const [codeVoucher, setCodeVoucher] = useState({
+		sellingStatus: false,
+		amount: 0,
+	});
 	// useEffect(() => {
 	// 	return () => {
 	// 		cleanup;
 	// 	};
 	// }, [input]);
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		products.map((item) => {
+			axios.post(`/api/product/${item._id}`).then((res) => {
+				if (res.data.success) {
+					const shopId = res.data?.product[0]?.shopId;
+
+					const selling = {
+						userId: userId,
+						productId: item._id,
+						quantity: item?.quantity,
+						shopId: shopId,
+					};
+					console.log(selling);
+					axios.post('/api/product/selling', selling).then((res) => {
+						if (res.data.success) {
+							setCodeVoucher({ ...codeVoucher, sellingStatus: true, amount: products.length });
+							props.history.push('/code');
+						} else {
+							alert('Failed to voucher');
+						}
+					});
+				}
+			});
+		});
+	};
+
 	return (
 		<main className='mt-5 pt-4'>
 			<div className='container wow fadeIn'>
-				<h2 className='my-5 h2 text-center'>Checkout form</h2>
+				<h2 className='my-5 h2 text-center'>Check out</h2>
 
 				<div className='row'>
 					<div className='col-md-8 mb-4'>
 						<div className='card'>
-							<form className='card-body'>
+							<form className='card-body' onSubmit={handleSubmit}>
 								<div className='md-form input-group pl-0 mb-5'>
 									<input
 										type='text'
@@ -43,7 +76,7 @@ function CheckOut() {
 								<div className='row'>
 									<div className='col-lg-4 col-md-12 mb-4'>
 										<label for='country'>Country</label>
-										<select className='custom-select d-block w-100' id='country' required>
+										<select className='custom-select d-block w-100' id='country'>
 											<option value=''>Choose...</option>
 											<option>United States</option>
 										</select>
@@ -52,7 +85,7 @@ function CheckOut() {
 
 									<div className='col-lg-4 col-md-6 mb-4'>
 										<label for='state'>State</label>
-										<select className='custom-select d-block w-100' id='state' required>
+										<select className='custom-select d-block w-100' id='state'>
 											<option value=''>Choose...</option>
 											<option>California</option>
 										</select>
@@ -61,8 +94,8 @@ function CheckOut() {
 
 									<div className='col-lg-4 col-md-6 mb-4'>
 										<label for='zip'>Zip</label>
-										<input type='text' className='form-control' id='zip' placeholder='' required />
-										<div className='invalid-feedback'>Zip code required.</div>
+										<input type='text' className='form-control' id='zip' placeholder='' />
+										<div className='invalid-feedback'>Zip code .</div>
 									</div>
 								</div>
 
@@ -71,26 +104,26 @@ function CheckOut() {
 								<div className='row'>
 									<div className='col-md-6 mb-3'>
 										<label for='cc-name'>Name on card</label>
-										<input type='text' className='form-control' id='cc-name' placeholder='' required />
+										<input type='text' className='form-control' id='cc-name' placeholder='' />
 										<small className='text-muted'>Full name as displayed on card</small>
-										<div className='invalid-feedback'>Name on card is required</div>
+										<div className='invalid-feedback'>Name on card is </div>
 									</div>
 									<div className='col-md-6 mb-3'>
 										<label for='cc-number'>Credit card number</label>
-										<input type='text' className='form-control' id='cc-number' placeholder='' required />
-										<div className='invalid-feedback'>Credit card number is required</div>
+										<input type='text' className='form-control' id='cc-number' placeholder='' />
+										<div className='invalid-feedback'>Credit card number is </div>
 									</div>
 								</div>
 								<div className='row'>
 									<div className='col-md-3 mb-3'>
 										<label for='cc-expiration'>Expiration</label>
-										<input type='text' className='form-control' id='cc-expiration' placeholder='' required />
-										<div className='invalid-feedback'>Expiration date required</div>
+										<input type='text' className='form-control' id='cc-expiration' placeholder='' />
+										<div className='invalid-feedback'>Expiration date </div>
 									</div>
 									<div className='col-md-3 mb-3'>
 										<label for='cc-expiration'>CVV</label>
-										<input type='text' className='form-control' id='cc-cvv' placeholder='' required />
-										<div className='invalid-feedback'>Security code required</div>
+										<input type='text' className='form-control' id='cc-cvv' placeholder='' />
+										<div className='invalid-feedback'>Security code </div>
 									</div>
 								</div>
 								<hr className='mb-4' />

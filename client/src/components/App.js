@@ -9,7 +9,9 @@ import NavBar from './views/NavBar/NavBar';
 import Footer from './views/Footer/Footer';
 import UploadVoucherPage from './views/UploadVoucherPage/UploadVoucherPage.js';
 import ProductItem from './views/Products/ProductItem.js';
+import MyShop from './views/MyShop/MyShop.js';
 import Checkout from './views/CheckOut/CheckOut';
+import CodeVoucher from './views/CheckOut/CodeVoucher';
 import { WOW } from 'wowjs';
 
 function App() {
@@ -30,9 +32,10 @@ function App() {
 					<Route exact path='/' component={Auth(LandingPage, false)} />
 					<Route exact path='/login' component={Auth(LoginPage, false)} />
 					<Route exact path='/register' component={Auth(RegisterPage, false)} />
-					<Route exact path='/voucher/upload' component={Auth(UploadVoucherPage, true)} />
+					<Route exact path='/myshop/:id' component={Auth(MyShop, true)} />
 					<Route exact path='/product/:id' component={ProductItem} />
-					<Route exact path='/checkout' component={Checkout} />
+					<Route exact path='/checkout' component={Auth(Checkout)} />
+					<Route exact path='/code' component={Auth(CodeVoucher)} />
 				</Switch>
 			</div>
 			<Footer />
