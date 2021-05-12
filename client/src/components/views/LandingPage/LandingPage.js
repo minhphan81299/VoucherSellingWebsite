@@ -126,7 +126,7 @@ function LandingPage() {
 				array = data[key].array;
 			}
 		}
-		console.log('array', array);
+
 		return array;
 	};
 
@@ -144,7 +144,6 @@ function LandingPage() {
 		// showFilteredResults(newFilters);
 		// setFilters(newFilters);
 		if (continents === 'category') {
-			console.log(filters);
 		}
 	};
 
@@ -279,12 +278,6 @@ function LandingPage() {
 				<br />
 				<br />
 
-				{/* {PostSize >= Limit && (
-					<div style={{ display: 'flex', justifyContent: 'center' }}>
-						<button onClick={onLoadMore}>Load More</button>
-					</div>
-				)} */}
-				{console.log(SearchTerms.length, visible)}
 				{SearchTerms.length > visible && (
 					<div style={{ display: 'flex', justifyContent: 'center' }}>
 						<button className='btn btn-primary' onClick={onLoadMore}>

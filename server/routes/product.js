@@ -49,13 +49,19 @@ router.post('/uploadVoucher', auth, (req, res) => {
 
 router.post('/selling', auth, (req, res) => {
 	const selling = new Selling(req.body);
-	console.log(req.body);
+
 	selling.save((err) => {
 		if (err) return res.status(400).json({ success: false, err });
 		return res.status(200).json({ success: true });
 	});
 });
-router.post('/selling/:id', auth, (req, res) => {});
+router.post('/getSellingProduct/:id', auth, (req, res) => {
+	Selling.find({ shopId: req.params.id }).exec((err, product) => {
+		if (err) return res.status(400).json({ success: false });
+
+		res.status(200).json({ success: true, product });
+	});
+});
 router.post('/getVoucher', (req, res) => {
 	let term = req.body.searchTerm;
 	let category = req.body.filters?.Category;
@@ -83,7 +89,7 @@ router.post('/getVoucher', (req, res) => {
 
 router.post('/:id', (req, res) => {
 	const _id = req.params.id;
-	console.log(req.params.id);
+
 	Product.find({ _id }).exec((err, product) => {
 		if (err) return res.status(400).json({ success: false });
 		res.status(200).json({ success: true, product });
@@ -92,10 +98,10 @@ router.post('/:id', (req, res) => {
 
 router.post('/getVoucherShopId/:id', (req, res) => {
 	const _id = req.params.id;
-	console.log(req.params.id);
+
 	Product.find({ _id }).exec((err, product) => {
 		if (err) return res.status(400).json({ success: false });
-		console.log(product);
+
 		res.status(200).json({ success: true, shopId: product.shopId });
 	});
 });
@@ -106,8 +112,6 @@ router.get('/products_by_id', (req, res) => {
 	let type = req.query.type;
 	let productIds = req.query.id;
 
-	console.log('req.query.id', req.query.id);
-
 	if (type === 'array') {
 		let ids = req.query.id.split(',');
 		productIds = [];
@@ -115,8 +119,6 @@ router.get('/products_by_id', (req, res) => {
 			return item;
 		});
 	}
-
-	console.log('productIds', productIds);
 
 	//we need to find the product information that belong to product Id
 	Product.find({ _id: { $in: productIds } })

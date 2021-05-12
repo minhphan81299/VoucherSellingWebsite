@@ -17,7 +17,7 @@ function ProductItem({ match }) {
 	useEffect(() => {
 		const getResult = async () => {
 			const result = await axios.post(`/api/product/${match.params.id}`);
-			console.log(result.data.product[0]);
+
 			const { description, price, category, _id } = result.data.product[0];
 
 			setProductItem({ description, price, category, _id });

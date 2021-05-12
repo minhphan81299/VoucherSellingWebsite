@@ -3,7 +3,7 @@ import UploadVoucherPage from '../UploadVoucherPage/UploadVoucherPage';
 import ShopChart from './ShopChart';
 import { Icon, Col, Card, Row } from 'antd';
 import styled from 'styled-components';
-
+import axios from 'axios';
 const StyledCard = styled(Card)`
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 	transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -18,10 +18,34 @@ const NavItem = styled.li`
 function MyShop({ match }) {
 	const [isActive, setIsActive] = useState('Upload');
 	const [uploadStatus, setUploadStatus] = useState(true);
-
+	const [dataTime, setDataTime] = useState();
 	useEffect(() => {
-		axios.post();
-		return () => {};
+		axios.post(`/api/product/getSellingProduct/${match.params.id}`).then((res) => {
+			if (res.data.success) {
+				const test = res.data.product.map((e) => ({
+					quantity: e.quantity,
+					dates: e.createdAt.split('T')[0],
+				}));
+
+				var date = [];
+				var value = [];
+				test.forEach((e) => {
+					if (date.indexOf(e.dates) === -1) {
+						date.push(e.dates);
+					}
+				});
+				date.forEach((e) => {
+					let sum = 0;
+					test.map((ele) => {
+						if (ele.dates === e) {
+							sum += ele.quantity;
+						}
+					});
+					value.push({ [e]: sum });
+				});
+				setDataTime(value);
+			}
+		});
 	}, []);
 	const onSearch = (e, continents, category) => {
 		if (category === 'Upload') {
@@ -65,7 +89,7 @@ function MyShop({ match }) {
 					</div>
 				</nav>
 			</div>
-			{uploadStatus === true ? <UploadVoucherPage url={match.params} /> : <ShopChart />}
+			{uploadStatus === true ? <UploadVoucherPage url={match.params} /> : <ShopChart dataTime={dataTime} />}
 		</div>
 	);
 }

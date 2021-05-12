@@ -28,7 +28,6 @@ function UploadVoucherPage(props) {
 		setPrice(e.target.value);
 	};
 	const onCategoryChange = (e) => {
-		console.log(e.target.value);
 		setCategory(e.target.value);
 	};
 	const updateImages = (newImages) => {
@@ -36,8 +35,7 @@ function UploadVoucherPage(props) {
 	};
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(category);
-		console.log(Images);
+
 		const voucher = {
 			title: tittle,
 			description: description,
@@ -46,7 +44,7 @@ function UploadVoucherPage(props) {
 			category: category,
 			shopId: shopId,
 		};
-		console.log(voucher);
+
 		Axios.post('/api/product/uploadVoucher', voucher).then((res) => {
 			if (res.data.success) {
 				alert('Upload successfully');

@@ -16,9 +16,7 @@ function FileUpload(props) {
 			if (response.data.success) {
 				setImages([...Images, response.data.image]);
 				props.refreshFunction([...Images, response.data.image]);
-				console.log('done');
 			} else {
-				console.log(response);
 				// alert('Failed to save the Image in Server');
 			}
 		});
@@ -58,8 +56,6 @@ function FileUpload(props) {
 						}}
 						{...getRootProps()}
 					>
-						{console.log('getRootProps', { ...getRootProps() })}
-						{console.log('getInputProps', { ...getInputProps() })}
 						<input {...getInputProps()} />
 						<Icon type='plus' style={{ fontSize: '3rem' }} />
 					</div>
