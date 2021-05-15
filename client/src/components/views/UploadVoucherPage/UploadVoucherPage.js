@@ -10,6 +10,7 @@ function UploadVoucherPage(props) {
 	const [tittle, setTittle] = useState('');
 	const [description, setDescription] = useState('');
 	const [price, setPrice] = useState(0);
+	const [countInStock, setCountInStock] = useState(0);
 	const [category, setCategory] = useState('Food');
 	const [Images, setImages] = useState();
 
@@ -33,6 +34,9 @@ function UploadVoucherPage(props) {
 	const updateImages = (newImages) => {
 		setImages(newImages);
 	};
+	const onCountChange = (e) => {
+		setCountInStock(e.target.value);
+	};
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
@@ -43,6 +47,7 @@ function UploadVoucherPage(props) {
 			image: Images,
 			category: category,
 			shopId: shopId,
+			quantity: countInStock,
 		};
 
 		Axios.post('/api/product/uploadVoucher', voucher).then((res) => {
@@ -74,6 +79,10 @@ function UploadVoucherPage(props) {
 				<br />
 				<label>Price</label>
 				<Input onChange={onPriceChange} value={price} type='number'></Input>
+				<br />
+				<br />
+				<label>Quantity</label>
+				<Input onChange={onCountChange} value={countInStock} type='number'></Input>
 				<br />
 				<br />
 				<lable style={{ marginRight: '25px' }}>Category</lable>

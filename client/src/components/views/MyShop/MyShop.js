@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import UploadVoucherPage from '../UploadVoucherPage/UploadVoucherPage';
+import MyVoucher from './MyVoucher';
 import ShopChart from './ShopChart';
 import { Icon, Col, Card, Row } from 'antd';
 import styled from 'styled-components';
@@ -18,6 +19,7 @@ const NavItem = styled.li`
 function MyShop({ match }) {
 	const [isActive, setIsActive] = useState('Upload');
 	const [uploadStatus, setUploadStatus] = useState(true);
+	const [myVoucher, setMyVoucher] = useState(false);
 	const [dataTime, setDataTime] = useState();
 	useEffect(() => {
 		axios.post(`/api/product/getSellingProduct/${match.params.id}`).then((res) => {
@@ -53,10 +55,15 @@ function MyShop({ match }) {
 			setUploadStatus(true);
 			return;
 			// return setSearchTerms(Products);
+		} else if (category === 'Chart') {
+			setIsActive(category);
+			setUploadStatus(false);
+		} else {
+			setIsActive(category);
+			setMyVoucher(true);
 		}
-		setIsActive(category);
-		setUploadStatus(false);
 	};
+
 	return (
 		<div>
 			<div style={{ width: '20%', margin: '4rem auto' }}>
@@ -85,11 +92,24 @@ function MyShop({ match }) {
 									Chart
 								</div>
 							</NavItem>
+							<NavItem className={`nav-item ${isActive === 'My Voucher' ? 'active' : ''}`}>
+								<div className='nav-link' onClick={(e) => onSearch(e, 'filter', 'Voucher')}>
+									My Voucher
+								</div>
+							</NavItem>
 						</ul>
 					</div>
 				</nav>
 			</div>
-			{uploadStatus === true ? <UploadVoucherPage url={match.params} /> : <ShopChart dataTime={dataTime} />}
+			{(() => {
+				if (isActive === 'Upload') {
+					return <UploadVoucherPage url={match.params} />;
+				} else if (isActive === 'Chart') {
+					return <ShopChart dataTime={dataTime} />;
+				} else {
+					return <MyVoucher shopId={match.params}></MyVoucher>;
+				}
+			})()}
 		</div>
 	);
 }

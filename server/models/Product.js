@@ -41,6 +41,10 @@ const productSchema = mongoose.Schema(
 		shopId: {
 			type: String,
 		},
+		quantity: {
+			type: Number,
+			default: 0,
+		},
 	},
 	{ timestamps: true }
 );

@@ -98,14 +98,31 @@ router.post('/:id', (req, res) => {
 
 router.post('/getVoucherShopId/:id', (req, res) => {
 	const _id = req.params.id;
-
-	Product.find({ _id }).exec((err, product) => {
+	console.log(req.params.id);
+	Product.find({ shopId: _id }).exec((err, product) => {
 		if (err) return res.status(400).json({ success: false });
 
-		res.status(200).json({ success: true, shopId: product.shopId });
+		res.status(200).json({ success: true, product });
 	});
 });
+router.post('/blockVoucher/:id', (req, res) => {
+	const _id = req.params.id;
+	console.log(req.params.id);
+	Product.findOneAndUpdate({ _id }, { $set: { quantity: 0 } }, { new: true }, (err, doc) => {
+		if (err) {
+			console.log('Something wrong when updating data!');
+		}
 
+		res.status(200).json({ success: true });
+	});
+	// findOneAndUpdate({age: 17}, {$set:{name:"Naomi"}}, {new: true}, (err, doc) => {
+	// 	if (err) {
+	// 		console.log("Something wrong when updating data!");
+	// 	}
+
+	// 	console.log(doc);
+	// });
+});
 //?id=${productId}&type=single
 //id=12121212,121212,1212121   type=array
 router.get('/products_by_id', (req, res) => {

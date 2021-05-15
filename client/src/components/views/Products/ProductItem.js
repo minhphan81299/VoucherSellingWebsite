@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 function ProductItem({ match }) {
 	const [productItem, setProductItem] = useState();
 	const [quantity, setQuantity] = useState(0);
+	const [countInStock, setCountInStock] = useState();
 	const [price, setPrice] = useState();
 	const [realPrice, setRealPrice] = useState();
 	const products = useSelector((state) => state.user.Carts);
@@ -18,9 +19,10 @@ function ProductItem({ match }) {
 		const getResult = async () => {
 			const result = await axios.post(`/api/product/${match.params.id}`);
 
-			const { description, price, category, _id } = result.data.product[0];
+			const { description, price, category, _id, quantity } = result.data.product[0];
 
 			setProductItem({ description, price, category, _id });
+			setCountInStock(quantity);
 			setPrice(price);
 			setRealPrice(price);
 		};
@@ -69,21 +71,27 @@ function ProductItem({ match }) {
 							<p className='lead font-weight-bold'>Description</p>
 
 							<p>{productItem?.description}</p>
+							<p className='lead font-weight-bold'>Count in Stock </p>
 
-							<form onSubmit={handleSubmit}>
-								<input
-									type='number'
-									value={quantity}
-									aria-label='Search'
-									className='form-control'
-									style={{ width: '100px' }}
-									onChange={handleChange}
-								/>
-								<button className='btn btn-primary' type='submit' style={{ margin: '0px' }}>
-									Add to cart
-									<i className='fas fa-shopping-cart ml-1'></i>
-								</button>
-							</form>
+							<p style={{ color: '#4285F4', fontWeight: '600' }}>{countInStock} vouchers</p>
+							{countInStock === 0 ? (
+								<p style={{ color: 'red', fontWeight: '700', fontSize: '2rem' }}>Out of Stock</p>
+							) : (
+								<form onSubmit={handleSubmit}>
+									<input
+										type='number'
+										value={quantity}
+										aria-label='Search'
+										className='form-control'
+										style={{ width: '100px' }}
+										onChange={handleChange}
+									/>
+									<button className='btn btn-primary' type='submit' style={{ margin: '0px' }}>
+										Add to cart
+										<i className='fas fa-shopping-cart ml-1'></i>
+									</button>
+								</form>
+							)}
 						</div>
 					</div>
 				</div>
