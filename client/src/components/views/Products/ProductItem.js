@@ -31,6 +31,8 @@ function ProductItem({ match }) {
 	}, []);
 
 	const handleChange = (e) => {
+		if (e.currentTarget.value > countInStock) return;
+		else if (e.currentTarget.value < 0) return;
 		setQuantity(e.currentTarget.value);
 		if (e.currentTarget.value > 0) setRealPrice(e.currentTarget.value * price);
 		setProductItem({ ...productItem, price: e.currentTarget.value * price, quantity: e.currentTarget.value });

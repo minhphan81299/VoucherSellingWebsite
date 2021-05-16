@@ -30,6 +30,13 @@ function CheckOut(props) {
 						shopId: shopId,
 					};
 					console.log(selling);
+					axios.post(`/api/product/updateCountInStock/${item._id}`, selling).then((res) => {
+						if (res.data.success) {
+							alert('Successfully');
+						} else {
+							alert('Failed to voucher');
+						}
+					});
 					axios.post('/api/product/selling', selling).then((res) => {
 						if (res.data.success) {
 							setCodeVoucher({ ...codeVoucher, sellingStatus: true, amount: products.length });
